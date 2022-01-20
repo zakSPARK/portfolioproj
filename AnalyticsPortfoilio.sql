@@ -157,3 +157,55 @@ SELECT cdeaths.continent, cdeaths.[location],   cdeaths.[date], cdeaths.populati
                 -- ORDER BY 2,3
 
 
+
+
+
+
+/*
+Queries used for Tableau Project
+*/
+
+--VIEWs used for Tableau visualization project
+
+DROP VIEW IF Exists TabView01
+CREATE VIEW TabView01 AS
+SELECT SUM(new_cases) as total_cases, SUM(CAST(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/SUM(new_cases)*100 as '%ofdeaths'
+FROM CovidDeaths
+WHERE continent is not NULL
+-- group by [date]
+
+
+
+
+-- Drop View if Exists TabView02
+Create View TabView02 as
+Select location, SUM(cast(new_deaths as int)) as TotalDeathCount
+From CovidDeaths
+--Where location like '%states%'
+Where continent is null 
+and location not in ('World', 'European Union', 'International')
+Group by location
+-- order by TotalDeathCount desc
+
+
+
+--Drop View if Exists TabView03
+CREATE VIEW TabView03 AS
+Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From CovidDeaths
+--Where location like '%states%'
+Group by Location, Population
+-- order by PercentPopulationInfected desc
+
+
+
+
+--Drop View if Exists TabView04
+CREATE VIEW TabView04 AS
+Select Location, Population,date, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From CovidDeaths
+--Where location like '%states%'
+Group by Location, Population, date
+-- order by PercentPopulationInfected desc
+
+
